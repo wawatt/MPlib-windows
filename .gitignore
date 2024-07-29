@@ -39,3 +39,5 @@ imgui.ini
 **/*_package_keyword_replaced.urdf
 dev/drake
 dev/pybind11_mkdoc
+
+log_install.txt
