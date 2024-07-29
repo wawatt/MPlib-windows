@@ -200,6 +200,7 @@ class DemoSetup:
 
     def move_to_pose(self, pose, with_screw=True):
         """API to multiplex between the two planning methods"""
+        pose = mplib.Pose(p=pose[0:3],q=pose[3:])
         if with_screw:
             return self.move_to_pose_with_screw(pose)
         else:
