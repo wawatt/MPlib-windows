@@ -2,7 +2,7 @@ import sapien.core as sapien
 
 from mplib.examples.demo_setup import DemoSetup
 from mplib.sapien_utils import SapienPlanner, SapienPlanningWorld
-
+import mplib
 
 class PlanningDemo(DemoSetup):
     """
@@ -21,6 +21,7 @@ class PlanningDemo(DemoSetup):
         super().__init__()
         self.setup_scene()
         self.load_robot()
+        self.setup_planner()
 
         # Set initial joint positions
         init_qpos = [0, 0.19, 0.0, -2.61, 0.0, 2.94, 0.78, 0, 0]
@@ -34,28 +35,32 @@ class PlanningDemo(DemoSetup):
         table.set_pose(sapien.Pose([0.56, 0, -0.025]))
 
         # red box is the target we want to grab
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([1, 0, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.02, 0.02, 0.06])
-        builder.add_box_visual(half_size=[0.02, 0.02, 0.06])
+        builder.add_box_visual(half_size=[0.02, 0.02, 0.06],material=material)
         red_cube = builder.build(name="red_cube")
         red_cube.set_pose(sapien.Pose([0.7, 0, 0.06]))
 
         # green box is the landing pad on which we want to place the red box
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 1, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.04, 0.04, 0.005])
-        builder.add_box_visual(half_size=[0.04, 0.04, 0.005])
+        builder.add_box_visual(half_size=[0.04, 0.04, 0.005],material=material)
         green_cube = builder.build(name="green_cube")
         green_cube.set_pose(sapien.Pose([0.4, 0.3, 0.005]))
 
         # blue box is the obstacle we want to avoid
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 0, 1, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.05, 0.2, 0.1])
-        builder.add_box_visual(half_size=[0.05, 0.2, 0.1])
+        builder.add_box_visual(half_size=[0.05, 0.2, 0.1],material=material)
         blue_cube = builder.build(name="blue_cube")
         blue_cube.set_pose(sapien.Pose([0.55, 0, 0.1]))
 
-        planning_world = SapienPlanningWorld(self.scene, [self.robot])
-        self.planner = SapienPlanner(planning_world, "panda_hand")
 
     def add_point_cloud(self):
         """We tell the planner about the obstacle through a point cloud"""
@@ -73,6 +78,7 @@ class PlanningDemo(DemoSetup):
         We pick up the red box while avoiding the blue box and
         place it back down on top of the green box.
         """
+        # execute motion ankor end
         pickup_pose = [0.7, 0, 0.12, 0, 1, 0, 0]
         delivery_pose = [0.4, 0.3, 0.13, 0, 1, 0, 0]
 
@@ -95,7 +101,7 @@ class PlanningDemo(DemoSetup):
         # use_attach ankor
         if use_attach:
             self.planner.update_attached_box(
-                [0.04, 0.04, 0.12], [0, 0, 0.14, 1, 0, 0, 0]
+                [0.04, 0.04, 0.12], mplib.Pose(p=[0, 0, 0.14],q=[1, 0, 0, 0])
             )
         # use_attach ankor end
 
