@@ -51,7 +51,7 @@ void PinocchioModelTpl<S>::init(const urdf::ModelInterfaceSharedPtr &urdf_model,
     print_verbose("Begin to parse URDF");
     visitor.log = &std::cout;
   }
-  if (not urdf_model_)
+  if (!urdf_model_)
     throw std::invalid_argument("The XML stream does not contain a valid URDF model.");
 
   visitor.setName(urdf_model_->getName());

@@ -77,7 +77,7 @@ void FCLModelTpl<S>::init(const urdf::ModelInterfaceSharedPtr &urdf_model,
   urdf_model_ = urdf_model;
   name_ = urdf_model->getName();
   package_dir_ = package_dir;
-  if (not urdf_model_)
+  if (!urdf_model_)
     throw std::invalid_argument("The XML stream does not contain a valid URDF model.");
   urdf::LinkConstSharedPtr root_link = urdf_model_->getRoot();
   dfsParseTree(root_link, "root's parent");

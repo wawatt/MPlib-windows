@@ -5,7 +5,7 @@
 # python3 -m pip install libclang=={clang-ver}
 
 # Additional flags that clang understands can be passed in as well
-CLANG_FLAGS="-std=c++17 ${@}"
+CLANG_FLAGS="-std=c++17 -DNOMINMAX -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH ${@}"
 PY_SCRIPT_PATH="dev/mkdoc.py"
 CPP_INCLUDE_DIR="include/mplib"
 OUTPUT_DOCSTRING_DIR="pybind/docstring"
@@ -44,7 +44,7 @@ for filepath in `find "$CPP_INCLUDE_DIR" -name "*.h" ! -name "types.h" ! -path "
   # Create output dir
   mkdir -p "$(dirname "$output_path")"
 
-  python3 "$PY_SCRIPT_PATH" -o="$output_path" $CLANG_FLAGS "$filepath" &
+  E:/ENVs/mplib/python.exe "$PY_SCRIPT_PATH" -o="$output_path" $CLANG_FLAGS "$filepath" &
 done
 
 # Wait for all background process to finish

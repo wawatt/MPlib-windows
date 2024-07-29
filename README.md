@@ -1,4 +1,4 @@
-# MPlib: a Lightweight Motion Planning Library
+# MPlib: a Lightweight Motion Planning Library for Windows
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/haosulab/MPlib/main/docs/demo.gif">
@@ -17,11 +17,39 @@ functionalities in robot manipulation.
 
 ## Installation
 
-Pre-built pip packages support Ubuntu 20.04+ with Python 3.8+.
+1. VS2022 with English language package installed.
+    <p align="center">
+      <img src="docs/win_docs_pics/VS2022_English_lan_pkg.png">
+    </p>
 
-```
-pip install mplib
-```
+2. use vcpkg install deps
+    ```bash
+    git clone https://github.com/microsoft/vcpkg.git
+    cd vcpkg
+    ./bootstrap-vcpkg.bat
+    ./vcpkg.exe install assimp:x64-windows
+    ./vcpkg.exe install boost:x64-windows
+    ./vcpkg.exe install Eigen3:x64-windows
+    ./vcpkg.exe install fcl:x64-windows
+    ./vcpkg.exe install ompl:x64-windows
+    ./vcpkg.exe install orocos-kdl:x64-windows
+    ./vcpkg.exe install urdfdom:x64-windows
+    ```
+3. clone source code
+   ```
+   git clone https://github.com/wawatt/MPlib-windows.git
+   cd MPlib-windows
+   git submodule update --init
+   ```
+4. change your dir 
+   - setup.py line 37
+   - dev/mkdoc.sh line 47
+   - CMakeLists.txt line 37,38,88
+5. build hpp-fcl and pinocchio2 with vcpkg
+5. create conda environment and install mplib
+    ```bash
+    pip install . --log log_install.txt
+    ```
 
 ## Usage
 
