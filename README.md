@@ -46,8 +46,9 @@ functionalities in robot manipulation.
    - setup.py line 37
    - dev/mkdoc.sh line 47
    - CMakeLists.txt line 37,38,88
-6. create python environment and install mplib
+6. create conda python environment and install mplib
     ```
+    conda install conda-forge::vs2015_runtime
     pip install numpy==1.26.4 sapien==3.0.0b
     ```
     open x64 Native Tools Command Prompt for VS 2022
