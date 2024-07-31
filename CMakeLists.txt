@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 project(mp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
+add_definitions("-DNOMINMAX")
+
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244 /wd4305 /wd4819 /wd4267 /MD")
   set(CMAKE_CXX_FLAGS_RELEASE "-Wall -fsized-deallocation")
@@ -33,19 +35,20 @@ set(Boost_NO_WARN_NEW_VERSIONS 1)  # silence Boost CMake warnings
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 find_package(ompl REQUIRED)
 find_package(fcl REQUIRED)
-# find_package(pinocchio REQUIRED)
+set(hpp-fcl_ROOT "E:/ENVs/vcpkgs/hpp-fcl-2.4.3/install_")
 set(pinocchio_ROOT "E:/ENVs/vcpkgs/pinocchio-2.7.1/install")
+set(hpp-fcl_DIR  " ${hpp-fcl_ROOT}/lib/cmake/hpp-fcl")
 set(pinocchio_DIR  " ${pinocchio_DIR}/lib/cmake/pinocchio")
-add_definitions("-DNOMINMAX")
-set(pinocchio_INCLUDE_DIRS ${pinocchio_ROOT}/include)
-set(pinocchio_LIBS ${pinocchio_ROOT}/lib/*)
+find_package(pinocchio REQUIRED)
+# set(pinocchio_INCLUDE_DIRS ${pinocchio_ROOT}/include)
+# set(pinocchio_LIBS ${pinocchio_ROOT}/lib/*)
 find_package(assimp REQUIRED)
 find_package(orocos_kdl REQUIRED)
 find_package(urdfdom REQUIRED)
 
 # store libries in a variable
 set(LIBS ompl fcl assimp::assimp orocos-kdl Boost::system Boost::filesystem urdfdom::urdfdom_model urdfdom::urdfdom_world
-${pinocchio_LIBS}
+# ${pinocchio_LIBS}
 )
 # mp
 file(GLOB_RECURSE MPLIB_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -63,22 +66,22 @@ target_compile_options(mp
 	$<$<CXX_COMPILER_ID:MSVC>:/bigobj> 
 	$<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>) 
 
-if(MSVC)
-  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(pinocchio_DLL "${pinocchio_ROOT}/bin/pinocchiod.dll")
-    message("-----------Debug-------------")
-  else()
-    set(pinocchio_DLL "${pinocchio_ROOT}/bin/pinocchio.dll")
-    message("-----------Release-------------")
-  endif()
-else(MSVC)
-    message(FATAL_ERROR "No actions for other platform.")
-endif(MSVC)
-ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
-    ${pinocchio_DLL}
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
+# if(MSVC)
+#   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+#     set(pinocchio_DLL "${pinocchio_ROOT}/bin/pinocchiod.dll")
+#     message("-----------Debug-------------")
+#   else()
+#     set(pinocchio_DLL "${pinocchio_ROOT}/bin/pinocchio.dll")
+#     message("-----------Release-------------")
+#   endif()
+# else(MSVC)
+#     message(FATAL_ERROR "No actions for other platform.")
+# endif(MSVC)
+# ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+# COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
+#     ${pinocchio_DLL}
+#     $<TARGET_FILE_DIR:${PROJECT_NAME}>
+# )
 
 # pybind11_mkdoc
 file(GLOB_RECURSE MPLIB_MKDOC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/mplib/*.h")

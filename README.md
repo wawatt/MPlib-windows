@@ -45,16 +45,15 @@ functionalities in robot manipulation.
 5. change your dirs
    - setup.py line 37
    - dev/mkdoc.sh line 47
-   - CMakeLists.txt line 37,38,88
+   - CMakeLists.txt line 38-41,91
 6. create conda python environment and install mplib
     ```
-    conda install conda-forge::vs2015_runtime
     pip install numpy==1.26.4 sapien==3.0.0b
     ```
     open x64 Native Tools Command Prompt for VS 2022
     ```bash
     cd MPlib-windows
-    path/to/python.exe -m pip install . --log log_install.txt
+    path/to/python.exe -m pip install . --log log.log
     pip install sapien==3.0.0b1
     ```
 7. 
