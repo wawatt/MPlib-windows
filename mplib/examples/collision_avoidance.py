@@ -2,7 +2,7 @@ import sapien.core as sapien
 
 from mplib.examples.demo_setup import DemoSetup
 from mplib.sapien_utils import SapienPlanner, SapienPlanningWorld
-import mplib
+from mplib import Pose
 
 class PlanningDemo(DemoSetup):
     """
@@ -101,7 +101,7 @@ class PlanningDemo(DemoSetup):
         # use_attach ankor
         if use_attach:
             self.planner.update_attached_box(
-                [0.04, 0.04, 0.12], mplib.Pose(p=[0, 0, 0.14],q=[1, 0, 0, 0])
+                [0.04, 0.04, 0.12], Pose(p=[0, 0, 0.14],q=[1, 0, 0, 0])
             )
         # use_attach ankor end
 

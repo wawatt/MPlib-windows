@@ -77,21 +77,27 @@ class PlanningDemo(DemoSetup):
         table.set_pose(sapien.Pose([0.56, 0, -0.025]))
 
         # boxes
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([1, 0, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.02, 0.02, 0.06])
-        builder.add_box_visual(half_size=[0.02, 0.02, 0.06])
+        builder.add_box_visual(half_size=[0.02, 0.02, 0.06],material=material)
         red_cube = builder.build(name="red_cube")
         red_cube.set_pose(sapien.Pose([0.7, 0, 0.06]))
 
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 1, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.04, 0.04, 0.005])
-        builder.add_box_visual(half_size=[0.04, 0.04, 0.005])
+        builder.add_box_visual(half_size=[0.04, 0.04, 0.005],material=material)
         green_cube = builder.build(name="green_cube")
         green_cube.set_pose(sapien.Pose([0.4, 0.3, 0.005]))
 
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 0, 1, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.05, 0.2, 0.1])
-        builder.add_box_visual(half_size=[0.05, 0.2, 0.1])
+        builder.add_box_visual(half_size=[0.05, 0.2, 0.1],material=material)
         blue_cube = builder.build(name="blue_cube")
         blue_cube.set_pose(sapien.Pose([0.55, 0, 0.1]))
 
@@ -109,7 +115,7 @@ class PlanningDemo(DemoSetup):
         """a subroutine to plan a path without moving the base"""
         # now do a partial ik to the pose with the base fixed
         status, goal_qposes = self.planner.IK(
-            pose, self.robot.get_qpos(), mask=[1, 1, 0, 0, 0, 0, 0, 0, 0]
+            Pose(p=pose[:3],q=pose[3:]), self.robot.get_qpos(), mask=[1, 1, 0, 0, 0, 0, 0, 0, 0]
         )
         if status != "Success":
             print("IK failed")
@@ -130,7 +136,7 @@ class PlanningDemo(DemoSetup):
         then, do another partial IK for the arm and generate motions for the arm
         """
         # do a full ik to the pose
-        status, goal_qposes = self.planner.IK(pose, self.robot.get_qpos())
+        status, goal_qposes = self.planner.IK(Pose(p=pose[:3],q=pose[3:]), self.robot.get_qpos())
         if status != "Success":
             print("IK failed")
             sys.exit(1)

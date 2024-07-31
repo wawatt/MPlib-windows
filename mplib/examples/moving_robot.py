@@ -1,5 +1,5 @@
 import sapien.core as sapien
-
+from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 
 
@@ -26,7 +26,7 @@ class PlanningDemo(DemoSetup):
 
         # We also need to tell the planner where the base is
         # since the sim and planner don't share info
-        self.planner.set_base_pose([1, 1, 0, 1, 0, 0, 0])
+        self.planner.set_base_pose(Pose(p=[1, 1, 0], q=[1, 0, 0, 0]))
 
         # Set initial joint positions
         init_qpos = [0, 0.19, 0.0, -2.61, 0.0, 2.94, 0.78, 0, 0]
@@ -40,21 +40,27 @@ class PlanningDemo(DemoSetup):
         table.set_pose(sapien.Pose([1.56, 1, -0.025]))
 
         # boxes
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([1, 0, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.02, 0.02, 0.06])
-        builder.add_box_visual(half_size=[0.02, 0.02, 0.06])
+        builder.add_box_visual(half_size=[0.02, 0.02, 0.06],material=material)
         red_cube = builder.build(name="red_cube")
         red_cube.set_pose(sapien.Pose([1.4, 1.3, 0.06]))
 
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 1, 0, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.02, 0.02, 0.04])
-        builder.add_box_visual(half_size=[0.02, 0.02, 0.04])
+        builder.add_box_visual(half_size=[0.02, 0.02, 0.04],material=material)
         green_cube = builder.build(name="green_cube")
         green_cube.set_pose(sapien.Pose([1.2, 0.7, 0.04]))
 
+        material = sapien.render.RenderMaterial()
+        material.set_base_color([0, 0, 1, 1])
         builder = self.scene.create_actor_builder()
         builder.add_box_collision(half_size=[0.02, 0.02, 0.07])
-        builder.add_box_visual(half_size=[0.02, 0.02, 0.07])
+        builder.add_box_visual(half_size=[0.02, 0.02, 0.07],material=material)
         blue_cube = builder.build(name="blue_cube")
         blue_cube.set_pose(sapien.Pose([1.6, 1.1, 0.07]))
 
@@ -96,7 +102,7 @@ class PlanningDemo(DemoSetup):
 
         # plan a path to the first pose
         result = self.planner.plan_pose(
-            poses[0], self.planner.robot.get_qpos(), time_step=1 / 250, wrt_world=False
+            Pose(p=poses[0][:3],q=pose[0][3:]), self.planner.robot.get_qpos(), time_step=1 / 250, wrt_world=False
         )
         if result["status"] != "Success":
             print(result["status"])

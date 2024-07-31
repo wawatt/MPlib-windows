@@ -48,7 +48,7 @@ functionalities in robot manipulation.
    - CMakeLists.txt line 38-41,91
 6. create conda python environment and install mplib
     ```
-    pip install numpy==1.26.4 sapien==3.0.0b
+    pip install numpy==1.26.4 sapien==3.0.0b toppra trimesh
     ```
     open x64 Native Tools Command Prompt for VS 2022
     ```bash

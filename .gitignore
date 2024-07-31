@@ -41,3 +41,4 @@ dev/drake
 dev/pybind11_mkdoc
 
 log.log
+install/

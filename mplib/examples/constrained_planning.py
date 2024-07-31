@@ -2,7 +2,7 @@
 
 import numpy as np
 import transforms3d
-
+from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 
 
@@ -36,7 +36,7 @@ class ConstrainedPlanningDemo(DemoSetup):
         """Helper function for constraint"""
         ee_idx = self.planner.link_name_2_idx[self.planner.move_group]
         ee_pose = self.planner.robot.get_pinocchio_model().get_link_pose(ee_idx)
-        mat = transforms3d.quaternions.quat2mat(ee_pose[3:])
+        mat = transforms3d.quaternions.quat2mat(ee_pose.get_q())
         return mat[:, 2]
 
     def make_f(self):
@@ -109,7 +109,7 @@ class ConstrainedPlanningDemo(DemoSetup):
         )
         for pose in poses:
             result = self.planner.plan_pose(
-                pose,
+                Pose(p=pose[0:3],q=pose[3:]),
                 self.robot.get_qpos(),
                 time_step=1 / 250,
                 constraint_function=self.make_f(),
@@ -128,7 +128,7 @@ class ConstrainedPlanningDemo(DemoSetup):
         )
         for pose in poses:
             result = self.planner.plan_pose(
-                pose,
+                Pose(p=pose[0:3],q=pose[3:]),
                 self.robot.get_qpos(),
                 time_step=1 / 250,
                 simplify=False,
