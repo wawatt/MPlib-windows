@@ -47,14 +47,15 @@ functionalities in robot manipulation.
    - dev/mkdoc.sh line 47
    - CMakeLists.txt line 38-41,91
 6. create conda python environment and install mplib
+    ```bash
+    conda create -n mplib python=3.10
     ```
-    pip install numpy==1.26.4 sapien==3.0.0b toppra trimesh
-    ```
+7. install mplib
     open x64 Native Tools Command Prompt for VS 2022
     ```bash
     cd MPlib-windows
     path/to/python.exe -m pip install . --log log.log
-    pip install sapien==3.0.0b1
+    pip install sapien trimesh
     ```
 7. 
    
@@ -66,5 +67,5 @@ functionalities in robot manipulation.
 See our [tutorial](https://motion-planning-lib.readthedocs.io/latest/tutorials/getting_started.html) for detailed usage and examples.
 
 ## TODO
-- [ ] modify examples
-- [ ] release wheel for windows
+- [x] modify examples
+- [x] release wheel for windows
