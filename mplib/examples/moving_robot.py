@@ -102,7 +102,7 @@ class PlanningDemo(DemoSetup):
 
         # plan a path to the first pose
         result = self.planner.plan_pose(
-            Pose(p=poses[0][:3],q=pose[0][3:]), self.planner.robot.get_qpos(), time_step=1 / 250, wrt_world=False
+            Pose(p=poses[0][:3],q=poses[0][3:]), self.planner.robot.get_qpos(), time_step=1 / 250, wrt_world=False
         )
         if result["status"] != "Success":
             print(result["status"])
