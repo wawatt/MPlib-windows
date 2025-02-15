@@ -1,5 +1,6 @@
 import sapien.core as sapien
 
+from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 
 
@@ -67,28 +68,28 @@ class PlanningDemo(DemoSetup):
         """
         # target poses ankor
         poses = [
-            [0.4, 0.3, 0.12, 0, 1, 0, 0],
-            [0.2, -0.3, 0.08, 0, 1, 0, 0],
-            [0.6, 0.1, 0.14, 0, 1, 0, 0],
+            Pose([0.4, 0.3, 0.12], [0, 1, 0, 0]),
+            Pose([0.2, -0.3, 0.08], [0, 1, 0, 0]),
+            Pose([0.6, 0.1, 0.14], [0, 1, 0, 0]),
         ]
         # target poses ankor end
         # execute motion ankor
         for i in range(3):
             pose = poses[i]
-            pose[2] += 0.2
+            pose.p[2] += 0.2
             self.move_to_pose(pose)
             self.open_gripper()
-            pose[2] -= 0.12
+            pose.p[2] -= 0.12
             self.move_to_pose(pose)
             self.close_gripper()
-            pose[2] += 0.12
+            pose.p[2] += 0.12
             self.move_to_pose(pose)
-            pose[0] += 0.1
+            pose.p[0] += 0.1
             self.move_to_pose(pose)
-            pose[2] -= 0.12
+            pose.p[2] -= 0.12
             self.move_to_pose(pose)
             self.open_gripper()
-            pose[2] += 0.12
+            pose.p[2] += 0.12
             self.move_to_pose(pose)
         # execute motion ankor end
 

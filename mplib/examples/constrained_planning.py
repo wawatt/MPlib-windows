@@ -2,6 +2,7 @@
 
 import numpy as np
 import transforms3d
+
 from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 
@@ -94,9 +95,9 @@ class ConstrainedPlanningDemo(DemoSetup):
         self.planner.robot.set_qpos(starting_qpos[:7])
         # all these poses are constrain compatible (roughly 15 degrees w.r.t. -z axis)
         poses = [
-            [-0.4, -0.3, 0.28, 0.0704682, -0.5356872, 0.8342834, 0.1097478],
-            [0.6, 0.1, 0.44, 0.0704682, -0.5356872, -0.8342834, -0.1097478],
-            [0, -0.3, 0.5, 0.1304237, -0.9914583, 0, 0],
+            Pose([-0.4, -0.3, 0.28], [0.0704682, -0.5356872, 0.8342834, 0.1097478]),
+            Pose([0.6, 0.1, 0.44], [0.0704682, -0.5356872, -0.8342834, -0.1097478]),
+            Pose([0, -0.3, 0.5], [0.1304237, -0.9914583, 0, 0]),
         ]
 
         # add some point cloud to make the planning more challenging
