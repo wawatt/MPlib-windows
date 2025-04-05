@@ -1,4 +1,5 @@
 import sapien.core as sapien
+
 from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 
@@ -73,32 +74,32 @@ class PlanningDemo(DemoSetup):
         the poses are specified with respect to the base of the robot.
         """
         poses = [
-            [1.4, 1.3, 0.12, 0, 1, 0, 0],
-            [1.2, 0.7, 0.08, 0, 1, 0, 0],
-            [1.6, 1.1, 0.14, 0, 1, 0, 0],
+            Pose([1.4, 1.3, 0.12], [0, 1, 0, 0]),
+            Pose([1.2, 0.7, 0.08], [0, 1, 0, 0]),
+            Pose([1.6, 1.1, 0.14], [0, 1, 0, 0]),
         ]
         for i in range(3):
             pose = poses[i]
-            pose[2] += 0.2
+            pose.p[2] += 0.2
             self.move_to_pose(pose)
             self.open_gripper()
-            pose[2] -= 0.12
+            pose.p[2] -= 0.12
             self.move_to_pose(pose)
             self.close_gripper()
-            pose[2] += 0.12
+            pose.p[2] += 0.12
             self.move_to_pose(pose)
-            pose[0] += 0.1
+            pose.p[0] += 0.1
             self.move_to_pose(pose)
-            pose[2] -= 0.12
+            pose.p[2] -= 0.12
             self.move_to_pose(pose)
             self.open_gripper()
-            pose[2] += 0.12
+            pose.p[2] += 0.12
             self.move_to_pose(pose)
 
         # convert the poses to be w.r.t. the base
         for pose in poses:
-            pose[0] -= 1
-            pose[1] -= 1
+            pose.p[0] -= 1
+            pose.p[1] -= 1
 
         # plan a path to the first pose
         result = self.planner.plan_pose(

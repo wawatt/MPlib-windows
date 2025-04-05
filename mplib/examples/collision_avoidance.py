@@ -1,5 +1,7 @@
+import numpy as np
 import sapien.core as sapien
 
+from mplib import Pose
 from mplib.examples.demo_setup import DemoSetup
 from mplib.sapien_utils import SapienPlanner, SapienPlanningWorld
 from mplib import Pose
@@ -61,37 +63,27 @@ class PlanningDemo(DemoSetup):
         blue_cube = builder.build(name="blue_cube")
         blue_cube.set_pose(sapien.Pose([0.55, 0, 0.1]))
 
+        planning_world = SapienPlanningWorld(self.scene, [self.robot])
+        self.planner = SapienPlanner(planning_world, "panda_hand")
+        # disable collision between the base and the ground
+        self.planner.planning_world.get_allowed_collision_matrix().set_entry(
+            "panda_link0", "ground_1", True
+        )
 
-    def add_point_cloud(self):
-        """We tell the planner about the obstacle through a point cloud"""
-        import trimesh
-
-        # add_point_cloud ankor
-        box = trimesh.creation.box([0.1, 0.4, 0.2])
-        points, _ = trimesh.sample.sample_surface(box, 1000)
-        points += [0.55, 0, 0.1]
-        self.planner.update_point_cloud(points, resolution=0.02)
-        # add_point_cloud ankor end
-
-    def demo(self, with_screw=True, use_point_cloud=True, use_attach=True):
+    def demo(self, with_screw=True, use_attach=True):
         """
         We pick up the red box while avoiding the blue box and
         place it back down on top of the green box.
         """
-        # execute motion ankor end
-        pickup_pose = [0.7, 0, 0.12, 0, 1, 0, 0]
-        delivery_pose = [0.4, 0.3, 0.13, 0, 1, 0, 0]
-
-        # tell the planner where the obstacle is
-        if use_point_cloud:
-            self.add_point_cloud()
+        pickup_pose = Pose([0.7, 0, 0.12], [0, 1, 0, 0])
+        delivery_pose = Pose([0.4, 0.3, 0.13], [0, 1, 0, 0])
 
         # move to the pickup pose
-        pickup_pose[2] += 0.2
+        pickup_pose.p[2] += 0.2
         # no need to check collision against attached object since nothing picked up yet
         self.move_to_pose(pickup_pose, with_screw)
         self.open_gripper()
-        pickup_pose[2] -= 0.12
+        pickup_pose.p[2] -= 0.12
         # no attach since nothing picked up yet
         self.move_to_pose(pickup_pose, with_screw)
         self.close_gripper()
@@ -100,24 +92,21 @@ class PlanningDemo(DemoSetup):
 
         # use_attach ankor
         if use_attach:
-            self.planner.update_attached_box(
-                [0.04, 0.04, 0.12], Pose(p=[0, 0, 0.14],q=[1, 0, 0, 0])
-            )
+            idx = self.planner.user_link_names.index("panda_hand")
+            self.planner.planning_world.attach_object(self.red_cube, self.robot, idx)
         # use_attach ankor end
 
         # move to the delivery pose
-        pickup_pose[2] += 0.12
+        pickup_pose.p[2] += 0.12
         self.move_to_pose(pickup_pose, with_screw)
-        delivery_pose[2] += 0.2
+        delivery_pose.p[2] += 0.2
         self.move_to_pose(delivery_pose, with_screw)
-        delivery_pose[2] -= 0.12
+        delivery_pose.p[2] -= 0.1
         self.move_to_pose(delivery_pose, with_screw)
         self.open_gripper()
-        delivery_pose[2] += 0.12
+        delivery_pose.p[2] += 0.12
         if use_attach:
-            ret = self.planner.detach_object(
-                f"robot_{self.planner.move_group_link_id}_box", also_remove=True
-            )
+            ret = self.planner.planning_world.detach_all_objects()
             assert ret, "object is not attached"
         self.move_to_pose(delivery_pose, with_screw)
 
@@ -132,4 +121,4 @@ if __name__ == "__main__":
     the delivery pose
     """
     demo = PlanningDemo()
-    demo.demo(False, True, True)
+    demo.demo(False, True)
