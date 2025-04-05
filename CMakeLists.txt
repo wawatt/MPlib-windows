@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
+
+set(CMAKE_TOOLCHAIN_FILE "E:/ENVs/vcpkgs/vcpkg-export/scripts/buildsystems/vcpkg.cmake")
 project(mp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -6,13 +8,15 @@ add_definitions("-DNOMINMAX")
 
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244 /wd4305 /wd4819 /wd4267 /MD")
-  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -fsized-deallocation")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g3 -Wall -fsized-deallocation")
 else(MSVC)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g3 -Wall -Werror -fsized-deallocation -Wno-deprecated-declarations")
 endif(MSVC)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
+
+message(STATUS "----------------------------------------CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 # set -fuse-ld=lld if lld is found
 find_program(LLD_FOUND ld.lld)
 if(LLD_FOUND)
@@ -35,13 +39,7 @@ set(Boost_NO_WARN_NEW_VERSIONS 1)  # silence Boost CMake warnings
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 find_package(ompl REQUIRED)
 find_package(fcl REQUIRED)
-set(hpp-fcl_ROOT "E:/ENVs/vcpkgs/hpp-fcl-2.4.3/install_")
-set(pinocchio_ROOT "E:/ENVs/vcpkgs/pinocchio-2.7.1/install")
-set(hpp-fcl_DIR  " ${hpp-fcl_ROOT}/lib/cmake/hpp-fcl")
-set(pinocchio_DIR  " ${pinocchio_DIR}/lib/cmake/pinocchio")
 find_package(pinocchio REQUIRED)
-# set(pinocchio_INCLUDE_DIRS ${pinocchio_ROOT}/include)
-# set(pinocchio_LIBS ${pinocchio_ROOT}/lib/*)
 find_package(assimp REQUIRED)
 find_package(orocos_kdl REQUIRED)
 find_package(urdfdom REQUIRED)

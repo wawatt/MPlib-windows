@@ -40,5 +40,5 @@ imgui.ini
 dev/drake
 dev/pybind11_mkdoc
 
-log.log
+*.log
 install/
