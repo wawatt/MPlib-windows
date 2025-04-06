@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_definitions("-DNOMINMAX")
 
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244 /wd4305 /wd4819 /wd4267 /MD")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /MD")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g3 -Wall -fsized-deallocation")
 else(MSVC)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g3 -Wall -Werror -fsized-deallocation -Wno-deprecated-declarations")

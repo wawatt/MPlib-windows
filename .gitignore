@@ -42,3 +42,4 @@ dev/pybind11_mkdoc
 
 *.log
 install/
+demos/pybind11/
